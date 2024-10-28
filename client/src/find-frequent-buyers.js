@@ -1,30 +1,33 @@
 const findFrequentBuyers = (purchases, category, minimumPurchaseCount = 1) => {
-  const frequentBuyers = [];
+  const purchaseCounts = new Map();
 
-  for (let i = 0; i < purchases.length; i++) {
-    const customerId = purchases[i].customerId;
-    const productCategory = purchases[i].category;
+  // First pass: aggregate counts and total amounts by customer for the given category
+  for (const purchase of purchases) {
+    if (purchase.category === category) {
+      const { customerId, amount } = purchase;
 
-    // Check if the product category matches and the customer has made multiple purchases
-    if (productCategory === category) {
-      let count = 0;
-      let totalAmount = 0;
-
-      for (let j = 0; j < purchases.length; j++) {
-        if (purchases[j].customerId === customerId && purchases[j].category === category) {
-          count++;
-          totalAmount += purchases[j].amount;
-        }
-      }
-
-      // Add the customer to frequentBuyers if they bought the product more than once
-      if (count >= minimumPurchaseCount && !frequentBuyers.includes(customerId)) {
-        frequentBuyers.push({
-          customerId,
-          count,
-          totalAmount,
+      if (!purchaseCounts.has(customerId)) {
+        purchaseCounts.set(customerId, {
+          count: 0,
+          totalAmount: 0,
         });
       }
+
+      const customerData = purchaseCounts.get(customerId);
+      customerData.count += 1;
+      customerData.totalAmount += amount;
+    }
+  }
+
+  // Second pass: collect frequent buyers based on minimumPurchaseCount
+  const frequentBuyers = [];
+  for (const [ customerId, { count, totalAmount } ] of purchaseCounts.entries()) {
+    if (count >= minimumPurchaseCount) {
+      frequentBuyers.push({
+        customerId,
+        count,
+        totalAmount,
+      });
     }
   }
 
