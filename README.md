@@ -59,3 +59,14 @@ Knowledge in all these technolgoies is not required. Just do your best with tech
 The last step is to zip up the repository (exclude the `node_modules` and `.git` folders) with your changes and email the zip file back to us so that we can review your work.
 
 *Please do not spend a lot of time on this. If you get stuck, just submit what you have, and describe what was giving you difficulty.*
+
+## Quick Submission Summary:
+
+In terms of perfromance:
+1. Refactored the FrequentBuyers logic from nested loops to two individual loops using hash maps for performance.
+2. Implemented frontend pagination (I actually attempted backend pagination first, but given the code structure it proved non-trivial since I was paginating purchases before filtered)
+
+In terms of bonuses:
+1. I went ahead and implemented better heuristics/custom flags for suspicious purchases.
+1.1 While I was thinking about the suspicious purchases heuristics, I decided to attach and display the reason they'd be suspicious.
+2. My intention was to keep my submission to the two hour time frame I mentioned in our interview. I was going to use jest for unit tests and implement some table sorting but decided to rather focus on the first extra with the time I alloted to this take home over quantity.
