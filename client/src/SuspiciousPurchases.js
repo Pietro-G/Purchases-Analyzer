@@ -30,7 +30,7 @@ const SuspiciousPurchases = ({ purchases }) => {
   useEffect(() => {
     setCurrentPage(0);
     setDisplayLimit((current) => current);
-  }, [ purchases ]); // Only reset when purchases prop changes
+  }, [ purchases ]);
 
   return (
     <>
