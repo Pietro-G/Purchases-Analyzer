@@ -10,6 +10,7 @@ import {
   TableCell,
   TableBody,
   Icon,
+  List,
 } from 'semantic-ui-react';
 
 import findSuspiciousPurchases from './find-suspicious-purchases.js';
@@ -19,6 +20,7 @@ const SuspiciousPurchases = ({ purchases }) => {
   const [ sortDirection, setSortDirection ] = useState(null);
 
   const suspiciousPurchases = findSuspiciousPurchases(purchases);
+
   return (
     <>
       <Header
@@ -30,7 +32,7 @@ const SuspiciousPurchases = ({ purchases }) => {
           marginBottom: 25,
         }}
       />
-      {(!suspiciousPurchases.length) && (
+      {!suspiciousPurchases.length && (
         <Segment placeholder>
           <Header icon>
             <Icon
@@ -41,7 +43,7 @@ const SuspiciousPurchases = ({ purchases }) => {
           </Header>
         </Segment>
       )}
-      {(!!suspiciousPurchases.length) && (
+      {!!suspiciousPurchases.length && (
         <Table
           celled
           sortable
@@ -50,22 +52,44 @@ const SuspiciousPurchases = ({ purchases }) => {
             <TableRow>
               <TableHeaderCell
                 sorted={sortedColumn === 'customerId' ? sortDirection : null}
-                onClick={() => { setSortedColumn('customerId'); setSortDirection((sortedColumn === 'customerId' && sortDirection === 'ascending') ? 'descending' : 'ascending'); }}
+                onClick={() => {
+                  setSortedColumn('customerId');
+                  setSortDirection(
+                    sortedColumn === 'customerId' && sortDirection === 'ascending'
+                      ? 'descending'
+                      : 'ascending',
+                  );
+                }}
               >
                 Customer ID
               </TableHeaderCell>
               <TableHeaderCell
                 sorted={sortedColumn === 'category' ? sortDirection : null}
-                onClick={() => { setSortedColumn('category'); setSortDirection((sortedColumn === 'category' && sortDirection === 'ascending') ? 'descending' : 'ascending'); }}
+                onClick={() => {
+                  setSortedColumn('category');
+                  setSortDirection(
+                    sortedColumn === 'category' && sortDirection === 'ascending'
+                      ? 'descending'
+                      : 'ascending',
+                  );
+                }}
               >
                 Category
               </TableHeaderCell>
               <TableHeaderCell
                 sorted={sortedColumn === 'amount' ? sortDirection : null}
-                onClick={() => { setSortedColumn('amount'); setSortDirection((sortedColumn === 'amount' && sortDirection === 'ascending') ? 'descending' : 'ascending'); }}
+                onClick={() => {
+                  setSortedColumn('amount');
+                  setSortDirection(
+                    sortedColumn === 'amount' && sortDirection === 'ascending'
+                      ? 'descending'
+                      : 'ascending',
+                  );
+                }}
               >
                 Amount
               </TableHeaderCell>
+              <TableHeaderCell>Reason</TableHeaderCell>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -79,6 +103,13 @@ const SuspiciousPurchases = ({ purchases }) => {
                     currency: 'USD',
                   }).format(purchase.amount)}
                 </TableCell>
+                <TableCell>
+                  <List>
+                    {purchase.suspiciousReasons.map((reason) => (
+                      <List.Item key={`${purchase.id}-${reason}`}>{reason}</List.Item>
+                    ))}
+                  </List>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -89,12 +120,15 @@ const SuspiciousPurchases = ({ purchases }) => {
 };
 
 SuspiciousPurchases.propTypes = {
-  purchases: PropTypes.arrayOf(PropTypes.shape({
-    amount: PropTypes.number.isRequired,
-    category: PropTypes.string.isRequired,
-    customerId: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
-  })).isRequired,
+  purchases: PropTypes.arrayOf(
+    PropTypes.shape({
+      amount: PropTypes.number.isRequired,
+      category: PropTypes.string.isRequired,
+      customerId: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
+      suspiciousReasons: PropTypes.arrayOf(PropTypes.string), // Prop validation for suspiciousReasons
+    }),
+  ).isRequired,
 };
 
 export default SuspiciousPurchases;
